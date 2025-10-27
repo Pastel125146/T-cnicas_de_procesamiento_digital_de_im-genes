@@ -1,0 +1,51 @@
+Progreso del Proyecto: Facial Landmarks App
+
+Paso 1: Creación del directorio del proyecto
+- Se creó el directorio 'facial-landmarks-app' en C:/Users/CAMILA/Documents.
+- Propósito: Organizar todos los archivos del proyecto en una estructura clara y aislada.
+
+Paso 2: Creación y activación del entorno virtual
+- Se creará el entorno virtual 'venv' dentro del directorio del proyecto.
+- Propósito: Aislar las dependencias del proyecto para evitar conflictos con otros proyectos o el sistema global.
+
+Paso 3: Instalación de dependencias
+- Se instalaron opencv-python, numpy, streamlit, pillow exitosamente.
+- MediaPipe no se pudo instalar debido a un error en pip (no se encontraron versiones). Se necesita resolver esto para que la aplicación funcione.
+- Propósito: Proporcionar las herramientas para detección de landmarks faciales, procesamiento de imágenes y creación de la interfaz web.
+
+Paso 4: Generación de requirements.txt
+- Se generará el archivo requirements.txt con las versiones exactas de las dependencias.
+- Propósito: Facilitar la replicación del entorno en otros sistemas o para deployment.
+
+Paso 5: Creación de src/config.py
+- Se creará el archivo con parámetros de configuración para el modelo MediaPipe.
+- Propósito: Centralizar la configuración para fácil ajuste y mantenimiento.
+
+Paso 6: Creación de src/utils.py
+- Se creará el archivo con funciones auxiliares para conversión y procesamiento de imágenes.
+- Propósito: Reutilizar código común para conversiones entre formatos PIL y OpenCV.
+
+Paso 7: Creación de src/detector.py
+- Se creará la clase FaceLandmarkDetector para detectar y dibujar landmarks.
+- Propósito: Encapsular la lógica principal de detección en una clase modular y reutilizable.
+
+Paso 8: Creación de app.py
+- Se creará la aplicación Streamlit principal.
+- Propósito: Proporcionar una interfaz web interactiva para subir imágenes y ver resultados.
+
+Paso 9: Creación de .gitignore
+- Se creará para ignorar archivos como venv, __pycache__, etc.
+- Propósito: Evitar subir archivos innecesarios a Git.
+
+Paso 10: Creación de README.md
+- Se creará con documentación del proyecto.
+- Propósito: Explicar cómo usar y contribuir al proyecto.
+
+Paso 11: Testing local
+- Se intentó ejecutar streamlit run app.py, pero falló debido a la falta de MediaPipe.
+- La aplicación no puede funcionar sin MediaPipe instalado.
+- Propósito: Verificar que todo funcione correctamente antes de deployment.
+
+Paso 12: Deployment en Streamlit Cloud
+- Se subirá a Git y se desplegará en Streamlit Cloud.
+- Propósito: Hacer la aplicación accesible públicamente.
