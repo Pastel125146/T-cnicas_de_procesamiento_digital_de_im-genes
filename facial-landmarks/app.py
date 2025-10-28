@@ -1,7 +1,6 @@
 # app.py
 """
 Aplicación Streamlit para detección de landmarks faciales.
-Optimizada para evitar errores de frontend (removeChild).
 """
 import streamlit as st
 from PIL import Image
@@ -19,8 +18,7 @@ import json
 # ====================================
 st.set_page_config(
     page_title="Detector de Landmarks Faciales",
-    layout="centered",
-    page_icon="💡"
+    layout="centered"
 )
 
 # ====================================
@@ -64,25 +62,19 @@ uploaded_file = st.file_uploader(
 )
 
 # ====================================
-# PLACEHOLDERS DINÁMICOS
+# PROCESAMIENTO
 # ====================================
-placeholder_original = st.empty()
-placeholder_resultado = st.empty()
-placeholder_demo = st.empty()
-placeholder_metrics = st.empty()
-placeholder_json = st.empty()
-
-# ====================================
-# PROCESAMIENTO DE IMAGEN
-# ====================================
-if uploaded_file:
+if uploaded_file is not None:
+    # Cargar y convertir imagen
     imagen_original = Image.open(uploaded_file)
     imagen_cv2 = pil_to_cv2(imagen_original)
+
+    # Redimensionar si es muy grande
     imagen_cv2 = resize_image(imagen_cv2, max_width=800)
 
     # Mostrar imagen original
     st.subheader("📸 Imagen Original")
-    placeholder_original.image(cv2_to_pil(imagen_cv2))
+    st.image(cv2_to_pil(imagen_cv2), use_container_width=True)
 
     # Detección de landmarks
     with st.spinner("🧠 Detectando landmarks faciales..."):
@@ -92,43 +84,55 @@ if uploaded_file:
 
     # Mostrar resultado
     st.subheader("✅ Landmarks Detectados")
-    placeholder_resultado.image(cv2_to_pil(imagen_procesada))
+    st.image(cv2_to_pil(imagen_procesada), use_container_width=True)
 
-    # Métricas y análisis
-    placeholder_metrics.empty()
+    # Mostrar métricas
+    st.divider()
     if info["deteccion_exitosa"]:
-        with placeholder_metrics.container():
-            st.success("🎯 Detección exitosa")
-            st.write(f"**Rostros detectados:** {info['rostros_detectados']}")
-            st.write(f"**Landmarks detectados:** {info['total_landmarks']}/{TOTAL_LANDMARKS}")
-            porcentaje = (info['total_landmarks'] / TOTAL_LANDMARKS) * 100
-            st.metric("Precisión estimada", f"{porcentaje:.1f}%")
+        st.success("🎯 Detección exitosa")
 
-            st.subheader("😃 Análisis de Expresiones Faciales")
-            alto, ancho = imagen_cv2.shape[:2]
-            apertura_boca = calcular_apertura_boca(landmarks, alto, ancho)
-            apertura_ojos_izq, apertura_ojos_der = calcular_apertura_ojos(landmarks, alto, ancho)
-            inclinacion_cabeza = calcular_inclinacion_cabeza(landmarks, alto, ancho)
+        st.write(f"**Rostros detectados:** {info['rostros_detectados']}")
+        st.write(f"**Landmarks detectados:** {info['total_landmarks']}/{TOTAL_LANDMARKS}")
 
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                st.metric("Apertura Boca", f"{apertura_boca:.1f} px")
-            with col2:
-                st.metric("Ojo Izq", f"{apertura_ojos_izq:.1f} px")
-                st.metric("Ojo Der", f"{apertura_ojos_der:.1f} px")
-            with col3:
-                st.metric("Inclinación Cabeza", f"{inclinacion_cabeza:.1f}°")
+        porcentaje = (info['total_landmarks'] / TOTAL_LANDMARKS) * 100
+        st.metric("Precisión estimada", f"{porcentaje:.1f}%")
+
+        # Análisis de expresiones faciales
+        st.subheader("😃 Análisis de Expresiones Faciales")
+
+        alto, ancho = imagen_cv2.shape[:2]
+
+        # Calcular métricas
+        apertura_boca = calcular_apertura_boca(landmarks, alto, ancho)
+        apertura_ojos_izq, apertura_ojos_der = calcular_apertura_ojos(landmarks, alto, ancho)
+        inclinacion_cabeza = calcular_inclinacion_cabeza(landmarks, alto, ancho)
+
+        # Mostrar métricas en columnas
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            st.metric("Apertura Boca", f"{apertura_boca:.1f} px")
+
+        with col2:
+            st.metric("Apertura Ojo Izq", f"{apertura_ojos_izq:.1f} px")
+            st.metric("Apertura Ojo Der", f"{apertura_ojos_der:.1f} px")
+
+        with col3:
+            st.metric("Inclinación Cabeza", f"{inclinacion_cabeza:.1f}°")
 
         # Botón de descarga JSON
+        st.subheader("📥 Exportar Landmarks")
         landmarks_json = json.dumps(landmarks_to_dict(landmarks, alto, ancho), indent=2)
-        placeholder_json.download_button(
-            label="📥 Descargar Landmarks (JSON)",
+        st.download_button(
+            label="Descargar Landmarks (JSON)",
             data=landmarks_json,
             file_name="landmarks.json",
-            mime="application/json"
+            mime="application/json",
+            key="download_landmarks"
         )
+
     else:
-        st.error("🚫 No se detectó ningún rostro en la imagen")
+        st.error(" No se detectó ningún rostro en la imagen")
         st.info("""
         **Consejos**:
         - Asegurate de que el rostro esté bien iluminado
@@ -142,13 +146,10 @@ if uploaded_file:
 else:
     st.info("Subí una imagen para comenzar la detección 👇")
     st.markdown("### Ejemplo de Resultado")
-    placeholder_demo.image(
+    st.image(
         "https://ai.google.dev/static/mediapipe/images/solutions/face_landmarker_keypoints.png?hl=es-419",
         caption="MediaPipe detecta 478 landmarks faciales",
-        width=400
+        use_container_width=True
     )
-
-
-
 
 
