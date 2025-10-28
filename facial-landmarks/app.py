@@ -18,7 +18,8 @@ import json
 # ====================================
 st.set_page_config(
     page_title="Detector de Landmarks Faciales",
-    layout="centered"
+    layout="centered",
+    page_icon="💡"
 )
 
 # ====================================
@@ -62,6 +63,13 @@ uploaded_file = st.file_uploader(
 )
 
 # ====================================
+# CONTENEDORES VISUALES (para evitar errores de render)
+# ====================================
+placeholder_original = st.empty()
+placeholder_resultado = st.empty()
+placeholder_demo = st.empty()
+
+# ====================================
 # PROCESAMIENTO
 # ====================================
 if uploaded_file is not None:
@@ -74,7 +82,7 @@ if uploaded_file is not None:
 
     # Mostrar imagen original
     st.subheader("📸 Imagen Original")
-    st.image(cv2_to_pil(imagen_cv2), use_container_width=True)
+    placeholder_original.image(cv2_to_pil(imagen_cv2))
 
     # Detección de landmarks
     with st.spinner("🧠 Detectando landmarks faciales..."):
@@ -84,7 +92,7 @@ if uploaded_file is not None:
 
     # Mostrar resultado
     st.subheader("✅ Landmarks Detectados")
-    st.image(cv2_to_pil(imagen_procesada), use_container_width=True)
+    placeholder_resultado.image(cv2_to_pil(imagen_procesada))
 
     # Mostrar métricas
     st.divider()
@@ -114,8 +122,8 @@ if uploaded_file is not None:
             st.metric("Apertura Boca", f"{apertura_boca:.1f} px")
 
         with col2:
-            st.metric("Apertura Ojo Izq", f"{apertura_ojos_izq:.1f} px")
-            st.metric("Apertura Ojo Der", f"{apertura_ojos_der:.1f} px")
+            st.metric("Ojo Izq", f"{apertura_ojos_izq:.1f} px")
+            st.metric("Ojo Der", f"{apertura_ojos_der:.1f} px")
 
         with col3:
             st.metric("Inclinación Cabeza", f"{inclinacion_cabeza:.1f}°")
@@ -127,12 +135,11 @@ if uploaded_file is not None:
             label="Descargar Landmarks (JSON)",
             data=landmarks_json,
             file_name="landmarks.json",
-            mime="application/json",
-            key="download_landmarks"
+            mime="application/json"
         )
 
     else:
-        st.error(" No se detectó ningún rostro en la imagen")
+        st.error("🚫 No se detectó ningún rostro en la imagen")
         st.info("""
         **Consejos**:
         - Asegurate de que el rostro esté bien iluminado
@@ -146,9 +153,10 @@ if uploaded_file is not None:
 else:
     st.info("Subí una imagen para comenzar la detección 👇")
     st.markdown("### Ejemplo de Resultado")
-    st.image(
+    placeholder_demo.image(
         "https://ai.google.dev/static/mediapipe/images/solutions/face_landmarker_keypoints.png?hl=es-419",
         caption="MediaPipe detecta 478 landmarks faciales",
-        use_container_width=True
+        width=400
     )
+
 
