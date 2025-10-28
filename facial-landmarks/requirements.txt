@@ -1,6 +1,8 @@
-streamlit==1.29.0
-mediapipe==0.10.0
+streamlit==1.28.0
+mediapipe==0.10.21
 opencv-python==4.8.0.76
 numpy==1.26.4
 Pillow==10.3.0
 requests==2.31.0
+
+
