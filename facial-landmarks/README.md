@@ -62,6 +62,15 @@ facial-landmarks-app/
 - NumPy: Operaciones numéricas.
 - Requests: Descargas HTTP.
 
+streamlit>=1.28.0
+mediapipe>=0.10.0
+opencv-python>=4.8.0
+numpy>=1.24.0
+Pillow>=10.0.0
+requests>=2.31.0
+
+python= 3.10
+
 ## Notas
 
 - Asegúrate de que el rostro esté bien iluminado y mirando hacia la cámara para mejores resultados.
