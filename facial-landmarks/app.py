@@ -74,7 +74,7 @@ if uploaded_file is not None:
 
     # Mostrar imagen original
     st.subheader("📸 Imagen Original")
-    st.image(cv2_to_pil(imagen_cv2))
+    st.image(cv2_to_pil(imagen_cv2), use_container_width=True)
 
     # Detección de landmarks
     with st.spinner("🧠 Detectando landmarks faciales..."):
@@ -84,7 +84,7 @@ if uploaded_file is not None:
 
     # Mostrar resultado
     st.subheader("✅ Landmarks Detectados")
-    st.image(cv2_to_pil(imagen_procesada))
+    st.image(cv2_to_pil(imagen_procesada), use_container_width=True)
 
     # Mostrar métricas
     st.divider()
@@ -127,7 +127,8 @@ if uploaded_file is not None:
             label="Descargar Landmarks (JSON)",
             data=landmarks_json,
             file_name="landmarks.json",
-            mime="application/json"
+            mime="application/json",
+            key="download_landmarks"
         )
 
     else:
@@ -148,5 +149,6 @@ else:
     st.image(
         "https://ai.google.dev/static/mediapipe/images/solutions/face_landmarker_keypoints.png?hl=es-419",
         caption="MediaPipe detecta 478 landmarks faciales",
-        width=400
+        use_container_width=True
     )
+
