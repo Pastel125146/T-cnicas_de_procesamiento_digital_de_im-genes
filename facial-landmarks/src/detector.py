@@ -55,20 +55,14 @@ class FaceLandmarkDetector:
             info["total_landmarks"] = len(rostro.landmark)
             info["deteccion_exitosa"] = True
             
-            # Dibujar landmarks
-            alto, ancho = image.shape[:2]
-            
-            for punto in rostro.landmark:
-                coord_x_pixel = int(punto.x * ancho)
-                coord_y_pixel = int(punto.y * alto)
-                
-                cv2.circle(
-                    imagen_con_puntos,
-                    (coord_x_pixel, coord_y_pixel),
-                    LANDMARK_RADIUS,
-                    LANDMARK_COLOR,
-                    LANDMARK_THICKNESS
-                )
+            # Dibujar landmarks usando mp_drawing
+            self.mp_drawing.draw_landmarks(
+                image=imagen_con_puntos,
+                landmark_list=rostro,
+                connections=mp.solutions.face_mesh.FACEMESH_TESSELATION,
+                landmark_drawing_spec=None,
+                connection_drawing_spec=self.mp_drawing_styles.get_default_face_mesh_tesselation_style()
+            )
             
             return imagen_con_puntos, rostro, info
         
