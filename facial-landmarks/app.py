@@ -5,8 +5,13 @@ Aplicación Streamlit para detección de landmarks faciales.
 import streamlit as st
 from PIL import Image
 from src.detector import FaceLandmarkDetector
-from src.utils import pil_to_cv2, cv2_to_pil, resize_image
+from src.utils import (
+    pil_to_cv2, cv2_to_pil, resize_image,
+    calcular_apertura_boca, calcular_apertura_ojos, calcular_inclinacion_cabeza,
+    landmarks_to_dict
+)
 from src.config import TOTAL_LANDMARKS
+import json
 
 # ====================================
 # CONFIGURACIÓN DE LA PÁGINA
@@ -91,12 +96,46 @@ if uploaded_file is not None:
 
         porcentaje = (info['total_landmarks'] / TOTAL_LANDMARKS) * 100
         st.metric("Precisión estimada", f"{porcentaje:.1f}%")
+
+        # Análisis de expresiones faciales
+        st.subheader("😃 Análisis de Expresiones Faciales")
+
+        alto, ancho = imagen_cv2.shape[:2]
+
+        # Calcular métricas
+        apertura_boca = calcular_apertura_boca(landmarks, alto, ancho)
+        apertura_ojos_izq, apertura_ojos_der = calcular_apertura_ojos(landmarks, alto, ancho)
+        inclinacion_cabeza = calcular_inclinacion_cabeza(landmarks, alto, ancho)
+
+        # Mostrar métricas en columnas
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            st.metric("Apertura Boca", f"{apertura_boca:.1f} px")
+
+        with col2:
+            st.metric("Apertura Ojo Izq", f"{apertura_ojos_izq:.1f} px")
+            st.metric("Apertura Ojo Der", f"{apertura_ojos_der:.1f} px")
+
+        with col3:
+            st.metric("Inclinación Cabeza", f"{inclinacion_cabeza:.1f}°")
+
+        # Botón de descarga JSON
+        st.subheader("📥 Exportar Landmarks")
+        landmarks_json = json.dumps(landmarks_to_dict(landmarks, alto, ancho), indent=2)
+        st.download_button(
+            label="Descargar Landmarks (JSON)",
+            data=landmarks_json,
+            file_name="landmarks.json",
+            mime="application/json"
+        )
+
     else:
-        st.error("🚫 No se detectó ningún rostro en la imagen")
+        st.error(" No se detectó ningún rostro en la imagen")
         st.info("""
         **Consejos**:
-        - Asegurate de que el rostro esté bien iluminado  
-        - Que mire hacia la cámara  
+        - Asegurate de que el rostro esté bien iluminado
+        - Que mire hacia la cámara
         - Probá con una imagen más nítida
         """)
 
