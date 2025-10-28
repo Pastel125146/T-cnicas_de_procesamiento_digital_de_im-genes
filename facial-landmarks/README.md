@@ -62,12 +62,12 @@ facial-landmarks-app/
 - NumPy: Operaciones numéricas.
 - Requests: Descargas HTTP.
 
-streamlit>=1.28.0,<2.0.0
-mediapipe>=0.10.0,<0.11.0
-opencv-python-headless>=4.8.0,<5.0.0
-numpy>=1.24.0,<2.0.0
-Pillow>=10.0.0,<11.0.0
-requests>=2.31.0,<3.0.0
+- streamlit>=1.28.0,<2.0.0
+- mediapipe>=0.10.0,<0.11.0
+- opencv-python-headless>=4.8.0,<5.0.0
+- numpy>=1.24.0,<2.0.0
+- Pillow>=10.0.0,<11.0.0
+- requests>=2.31.0,<3.0.0
 
 python= 3.10
 
