@@ -31,8 +31,11 @@ models/colorization/*.prototxt
 # ============================
 # ARCHIVOS DE GENERACIÓN TEMPORAL
 # ============================
-*.npy
 *.npz
+
+# Ignorar npy genéricos pero permitir los necesarios
+*.npy
+!models/colorization/*.npy
 
 # ============================
 # STREAMLIT CACHE
