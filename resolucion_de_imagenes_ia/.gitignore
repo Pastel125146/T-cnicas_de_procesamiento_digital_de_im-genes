@@ -1,0 +1,41 @@
+# ============================
+# ARCHIVOS SENSIBLES / SECRETOS
+# ============================
+.env
+
+# ============================
+# ARCHIVOS TEMPORALES DE PYTHON
+# ============================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.pkl
+*.log
+
+# ============================
+# MODELOS / PESOS PESADOS
+# ============================
+*.pth
+*.ckpt
+*.onnx
+*.pt
+
+# ============================
+# COLORIZATION MODELS (OPCIONAL)
+# ============================
+models/colorization/*.caffemodel
+models/colorization/*.prototxt
+
+# ============================
+# ARCHIVOS DE GENERACIÓN TEMPORAL
+# ============================
+*.npy
+*.npz
+
+# ============================
+# STREAMLIT CACHE
+# ============================
+.streamlit/
+.cache/
