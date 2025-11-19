@@ -1,6 +1,7 @@
 # Facial Landmarks Detection App
 
 Una aplicación web para detectar landmarks faciales usando MediaPipe y Streamlit.
+url: https://t-cnicasdeprocesamientodigitaldeim-genes-iafa6nbbjezdfelllj7gs.streamlit.app/
 
 ## Descripción
 
